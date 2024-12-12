@@ -58,7 +58,7 @@ function CreateCabinForm() {
   })
 
   function onSubmit(data: CabinType) {
-    createNewCabin(data)
+    createNewCabin({ ...data, image: data.image[0] })
   }
 
   return (
@@ -136,8 +136,8 @@ function CreateCabinForm() {
         />
       </FormRow>
 
-      <FormRow label='Cabin photo' error={''}>
-        <FileInput id='image' accept='image/*' />
+      <FormRow label='Cabin photo' error={errors.image?.message || ''}>
+        <FileInput id='image' accept='image/*' {...register('image')} />
       </FormRow>
 
       <StyledRow>
