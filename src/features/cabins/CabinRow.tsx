@@ -3,6 +3,7 @@ import { formatCurrency } from '../../utils/helpers'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteCabin } from '../../services/apiCabins'
 import toast from 'react-hot-toast'
+import { type CabinType } from '../../types'
 
 const TableRow = styled.div`
   display: grid;
@@ -44,14 +45,7 @@ const Discount = styled.div`
 `
 
 type Props = {
-  cabin: {
-    id: number
-    name: string
-    maxCapacity: number
-    regularPrice: number
-    discount: number
-    image: string
-  }
+  cabin: CabinType
 }
 
 export default function CabinRow({ cabin }: Props) {
