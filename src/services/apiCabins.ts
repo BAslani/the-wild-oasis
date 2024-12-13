@@ -47,6 +47,47 @@ export async function createCabin(newCabin: CabinType) {
   return data
 }
 
+export async function updateCabin(newCabin: CabinType) {
+  const isKeepingImage = newCabin.image.startsWith?.(supabaseUrl)
+  let imagePath = ''
+  let imageName = ''
+
+  if (isKeepingImage) {
+    imagePath = newCabin.image
+  } else {
+    imageName = `${Math.random()}-${
+      (newCabin.image[0] as unknown as File).name
+    }`.replace('/', '')
+    imagePath = `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`
+  }
+
+  const { data, error } = await supabase
+    .from('cabins')
+    .update({ ...newCabin, image: imagePath })
+    .eq('id', newCabin.id)
+    .select()
+
+  if (error) {
+    console.error('Cabin could not be updated')
+    throw new Error('Cabin could not be updated')
+  }
+
+  if (!isKeepingImage) {
+    const { error: storageError } = await supabase.storage
+      .from('cabin-images')
+      .upload(imageName, newCabin.image[0])
+
+    if (storageError) {
+      console.error(storageError)
+      throw new Error(
+        'Cabin image could not be uploaded, the cabin image was not updated'
+      )
+    }
+  }
+
+  return data
+}
+
 export async function deleteCabin(id: number) {
   const { data, error } = await supabase.from('cabins').delete().eq('id', id)
 
