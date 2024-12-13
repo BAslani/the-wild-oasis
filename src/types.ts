@@ -7,3 +7,10 @@ export type CabinType = {
   description: string
   image: string
 }
+
+export type SettingsType = {
+  minBookingLength: number
+  maxBookingLength: number
+  maxGuestsPerBooking: number
+  breakfastPrice: number
+}
