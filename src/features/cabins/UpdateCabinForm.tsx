@@ -4,12 +4,10 @@ import Button from '../../ui/Button'
 import FileInput from '../../ui/FileInput'
 import Textarea from '../../ui/Textarea'
 import { useForm } from 'react-hook-form'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { updateCabin } from '../../services/apiCabins'
-import toast from 'react-hot-toast'
 import { CabinType } from '../../types'
 import FormRow from '../../ui/FormRow'
 import styled from 'styled-components'
+import { useUpdateCabin } from './useUpdateCabin'
 
 const StyledRow = styled.div`
   display: grid;
@@ -48,28 +46,17 @@ function UpdateCabinForm({ cabinToEdit }: Props) {
   })
 
   const { errors } = formState
-
-  const queryClient = useQueryClient()
-  const { mutate, isPending } = useMutation({
-    mutationFn: updateCabin,
-    onSuccess: () => {
-      toast.success('New Cabin successfully updated')
-      queryClient.invalidateQueries({
-        queryKey: ['cabins'],
-      })
-    },
-    onError: (err) => toast.error(err.message),
-  })
+  const { updateCabin, isUpdating } = useUpdateCabin()
 
   function onSubmit(data: CabinType) {
-    mutate(data)
+    updateCabin(data)
   }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow label='Cabin name' error={errors.name?.message || ''}>
         <Input
-          disabled={isPending}
+          disabled={isUpdating}
           type='text'
           id='name'
           {...register('name', {
@@ -83,7 +70,7 @@ function UpdateCabinForm({ cabinToEdit }: Props) {
         error={errors.maxCapacity?.message || ''}
       >
         <Input
-          disabled={isPending}
+          disabled={isUpdating}
           type='number'
           id='maxCapacity'
           {...register('maxCapacity', {
@@ -98,7 +85,7 @@ function UpdateCabinForm({ cabinToEdit }: Props) {
 
       <FormRow label='Regular price' error={errors.regularPrice?.message || ''}>
         <Input
-          disabled={isPending}
+          disabled={isUpdating}
           type='number'
           id='regularPrice'
           {...register('regularPrice', {
@@ -113,7 +100,7 @@ function UpdateCabinForm({ cabinToEdit }: Props) {
 
       <FormRow label='Discount' error={errors.discount?.message || ' '}>
         <Input
-          disabled={isPending}
+          disabled={isUpdating}
           type='number'
           id='discount'
           defaultValue={0}
@@ -133,7 +120,7 @@ function UpdateCabinForm({ cabinToEdit }: Props) {
         <Textarea
           typeof='number'
           id='description'
-          disabled={isPending}
+          disabled={isUpdating}
           defaultValue=''
           {...register('description', {
             required: 'Required',
@@ -145,7 +132,7 @@ function UpdateCabinForm({ cabinToEdit }: Props) {
         <FileInput
           id='image'
           accept='image/*'
-          disabled={isPending}
+          disabled={isUpdating}
           {...register('image')}
         />
       </FormRow>
@@ -155,7 +142,7 @@ function UpdateCabinForm({ cabinToEdit }: Props) {
         <Button size='medium' variation='secondary' type='reset'>
           Cancel
         </Button>
-        <Button variation='primary' size='medium' disabled={isPending}>
+        <Button variation='primary' size='medium' disabled={isUpdating}>
           Edit cabin
         </Button>
       </StyledRow>
