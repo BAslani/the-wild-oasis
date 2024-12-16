@@ -1,4 +1,15 @@
+import {
+  cloneElement,
+  createContext,
+  isValidElement,
+  ReactNode,
+  useContext,
+  useState,
+} from 'react'
+import { createPortal } from 'react-dom'
+import { HiXMark } from 'react-icons/hi2'
 import styled from 'styled-components'
+import { useOutsideClick } from '../hooks/useOutsideClick'
 
 const StyledModal = styled.div`
   position: fixed;
@@ -48,3 +59,78 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `
+
+type WindowProps = {
+  children: ReactNode
+  name: string
+}
+
+type ModalProps = {
+  children: ReactNode
+}
+
+type OpenProps = {
+  children: ReactNode
+  opens: string
+}
+
+const ModalContext = createContext<{
+  open: (windowName: string) => void
+  close: () => void
+  openName: string
+}>({
+  open,
+  close,
+  openName: '',
+})
+
+function Modal({ children }: ModalProps) {
+  const [openName, setOpenName] = useState('')
+  const close = () => setOpenName('')
+  const open = setOpenName
+
+  return (
+    <ModalContext.Provider value={{ openName, close, open }}>
+      {children}
+    </ModalContext.Provider>
+  )
+}
+
+function Open({ children, opens: opensWindowName }: OpenProps) {
+  const { open } = useContext(ModalContext)
+  if (!isValidElement(children)) {
+    console.error('The child of Open must be a valid React element.')
+    return null
+  }
+
+  return cloneElement(children as React.ReactElement, {
+    onClick: () => open(opensWindowName),
+  })
+}
+
+function Window({ children, name }: WindowProps) {
+  const { openName, close } = useContext(ModalContext)
+  const ref = useOutsideClick(close)
+  if (name !== openName) return null
+
+  return createPortal(
+    <Overlay>
+      <StyledModal ref={ref}>
+        <Button onClick={close}>
+          <HiXMark />
+        </Button>
+        <div>
+          {cloneElement(children as React.ReactElement, {
+            onCloseModal: close,
+          })}
+        </div>
+      </StyledModal>
+    </Overlay>,
+    document.body
+  )
+}
+
+Modal.Open = Open
+Modal.Window = Window
+
+export default Modal

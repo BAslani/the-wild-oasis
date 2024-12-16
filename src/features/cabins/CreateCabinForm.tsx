@@ -36,7 +36,11 @@ const StyledRow = styled.div`
   }
 `
 
-function CreateCabinForm() {
+type Props = {
+  onCloseModal?: () => void
+}
+
+function CreateCabinForm({ onCloseModal }: Props) {
   const { register, handleSubmit, reset, getValues, formState } =
     useForm<CabinType>()
 
@@ -47,13 +51,19 @@ function CreateCabinForm() {
     createCabin(
       { ...data, image: data.image[0] },
       {
-        onSuccess: () => reset(),
+        onSuccess: () => {
+          reset()
+          onCloseModal?.()
+        },
       }
     )
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      typeof={onCloseModal ? 'modal' : 'regular'}
+    >
       <FormRow label='Cabin name' error={errors.name?.message || ''}>
         <Input
           disabled={isCreating}
@@ -133,7 +143,12 @@ function CreateCabinForm() {
 
       <StyledRow>
         {/* type is an HTML attribute! */}
-        <Button size='medium' variation='secondary' type='reset'>
+        <Button
+          onClick={() => onCloseModal?.()}
+          size='medium'
+          variation='secondary'
+          type='reset'
+        >
           Cancel
         </Button>
         <Button variation='primary' size='medium' disabled={isCreating}>

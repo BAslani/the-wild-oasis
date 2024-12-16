@@ -38,9 +38,10 @@ const StyledRow = styled.div`
 
 type Props = {
   cabinToEdit: CabinType
+  onCloseModal?: () => void
 }
 
-function UpdateCabinForm({ cabinToEdit }: Props) {
+function UpdateCabinForm({ cabinToEdit, onCloseModal }: Props) {
   const { register, handleSubmit, getValues, formState } = useForm<CabinType>({
     defaultValues: cabinToEdit,
   })
@@ -49,7 +50,11 @@ function UpdateCabinForm({ cabinToEdit }: Props) {
   const { updateCabin, isUpdating } = useUpdateCabin()
 
   function onSubmit(data: CabinType) {
-    updateCabin(data)
+    updateCabin(data, {
+      onSuccess: () => {
+        onCloseModal?.()
+      },
+    })
   }
 
   return (
@@ -139,7 +144,12 @@ function UpdateCabinForm({ cabinToEdit }: Props) {
 
       <StyledRow>
         {/* type is an HTML attribute! */}
-        <Button size='medium' variation='secondary' type='reset'>
+        <Button
+          onClick={onCloseModal}
+          size='medium'
+          variation='secondary'
+          type='reset'
+        >
           Cancel
         </Button>
         <Button variation='primary' size='medium' disabled={isUpdating}>
