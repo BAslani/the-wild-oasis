@@ -50,7 +50,7 @@ export default function Filter({ filterField, options }: Props) {
     setSearchParams(searchParams)
   }
 
-  const filterValue = searchParams.get('discount') || options[0].value
+  const filterValue = searchParams.get(filterField) || options[0].value
 
   return (
     <StyledFilter>
