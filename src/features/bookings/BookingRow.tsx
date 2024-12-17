@@ -6,6 +6,7 @@ import Table from '../../ui/Table'
 
 import { formatCurrency } from '../../utils/helpers'
 import { formatDistanceFromNow } from '../../utils/helpers'
+import { BookingType } from '../../types'
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -34,21 +35,25 @@ const Amount = styled.div`
   font-weight: 500;
 `
 
+type Props = {
+  booking: BookingType
+}
+
+type BookingStatus = 'unconfirmed' | 'checked-in' | 'checked-out'
+
 function BookingRow({
   booking: {
-    id: bookingId,
-    created_at,
     startDate,
     endDate,
     numNights,
-    numGuests,
+
     totalPrice,
     status,
     guests: { fullName: guestName, email },
     cabins: { name: cabinName },
   },
-}) {
-  const statusToTagName = {
+}: Props) {
+  const statusToTagName: Record<BookingStatus, string> = {
     unconfirmed: 'blue',
     'checked-in': 'green',
     'checked-out': 'silver',
@@ -76,7 +81,9 @@ function BookingRow({
         </span>
       </Stacked>
 
-      <Tag type={statusToTagName[status]}>{status.replace('-', ' ')}</Tag>
+      <Tag typeof={statusToTagName[status as BookingStatus]}>
+        {status.replace('-', ' ')}
+      </Tag>
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
     </Table.Row>

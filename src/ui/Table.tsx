@@ -1,6 +1,5 @@
 import { createContext, ReactElement, ReactNode, useContext } from 'react'
 import styled from 'styled-components'
-import { CabinType } from '../types'
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -94,12 +93,12 @@ function Row({ children }: { children: ReactNode }) {
     </StyledRow>
   )
 }
-function Body({
+function Body<T>({
   data,
   render,
 }: {
-  data: CabinType[]
-  render: (cabin: CabinType) => ReactElement
+  data: T[]
+  render: (item: T) => ReactElement
 }) {
   if (data.length === 0) return <Empty>No data to show at the moment</Empty>
   return <StyledBody>{data.map(render)}</StyledBody>

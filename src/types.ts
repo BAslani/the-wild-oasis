@@ -14,3 +14,26 @@ export type SettingsType = {
   maxGuestsPerBooking: number
   breakfastPrice: number
 }
+
+export type BookingType = {
+  id: number
+  createdAt: Date
+  startDate: Date
+  endDate: Date
+  numNights: number
+  numGuests: number
+  cabinPrice: number
+  extrasPrice: number
+  totalPrice: number
+  status: string
+  hasBreakfast: boolean
+  isPaid: boolean
+  observations: string
+  guests: {
+    fullName: string
+    email: string
+  }
+  cabins: {
+    name: string
+  }
+}
