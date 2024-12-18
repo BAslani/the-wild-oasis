@@ -42,7 +42,7 @@ export async function getBookins({
   return { data, count }
 }
 
-export async function getBooking(id: number) {
+export async function getBooking(id: string) {
   const { data, error } = await supabase
     .from('bookings')
     .select('*, cabins(*), guests(*)')
@@ -111,7 +111,7 @@ export async function getStaysTodayActivity() {
   return data
 }
 
-export async function updateBooking(id: number, obj: BookingType) {
+export async function updateBooking(id: number, obj: Partial<BookingType>) {
   const { data, error } = await supabase
     .from('bookings')
     .update(obj)

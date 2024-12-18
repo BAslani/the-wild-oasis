@@ -11,6 +11,7 @@ import DataItem from '../../ui/DataItem'
 import { Flag } from '../../ui/Flag'
 
 import { formatDistanceFromNow, formatCurrency } from '../../utils/helpers'
+import { BookingType } from '../../types'
 
 const StyledBookingDataBox = styled.section`
   /* Box */
@@ -67,8 +68,10 @@ const Guest = styled.div`
     color: var(--color-grey-700);
   }
 `
-
-const Price = styled.div`
+interface PriceProps extends React.HTMLAttributes<HTMLDivElement> {
+  $isPaid?: boolean
+}
+const Price = styled.div<PriceProps>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -77,9 +80,9 @@ const Price = styled.div`
   margin-top: 2.4rem;
 
   background-color: ${(props) =>
-    props.isPaid ? 'var(--color-green-100)' : 'var(--color-yellow-100)'};
+    props.$isPaid ? 'var(--color-green-100)' : 'var(--color-yellow-100)'};
   color: ${(props) =>
-    props.isPaid ? 'var(--color-green-700)' : 'var(--color-yellow-700)'};
+    props.$isPaid ? 'var(--color-green-700)' : 'var(--color-yellow-700)'};
 
   & p:last-child {
     text-transform: uppercase;
@@ -101,8 +104,11 @@ const Footer = styled.footer`
   text-align: right;
 `
 
+type Props = {
+  booking: BookingType
+}
 // A purely presentational component
-function BookingDataBox({ booking }) {
+function BookingDataBox({ booking }: Props) {
   const {
     created_at,
     startDate,
@@ -163,7 +169,7 @@ function BookingDataBox({ booking }) {
           {hasBreakfast ? 'Yes' : 'No'}
         </DataItem>
 
-        <Price isPaid={isPaid}>
+        <Price $isPaid={isPaid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
             {formatCurrency(totalPrice)}
 

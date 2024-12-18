@@ -17,7 +17,7 @@ export type SettingsType = {
 
 export type BookingType = {
   id: number
-  createdAt: Date
+  created_at: Date
   startDate: Date
   endDate: Date
   numNights: number
@@ -32,6 +32,9 @@ export type BookingType = {
   guests: {
     fullName: string
     email: string
+    country: string
+    countryFlag: string
+    nationalID: string
   }
   cabins: {
     name: string
