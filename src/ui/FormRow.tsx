@@ -38,8 +38,8 @@ const Error = styled.span`
 `
 
 type Props = {
-  label: string
-  error: string
+  label?: string
+  error?: string
   children: ReactElement
 }
 
