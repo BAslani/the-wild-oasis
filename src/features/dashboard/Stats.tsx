@@ -4,13 +4,13 @@ import {
   HiOutlineCalendarDays,
   HiOutlineChartBar,
 } from 'react-icons/hi2'
-import { BookingType } from '../../types'
+import { BookingType, StaysType } from '../../types'
 import Stat from './Stat'
 import { formatCurrency } from '../../utils/helpers'
 
 type Props = {
   bookings: Partial<BookingType>[]
-  confirmedStays: Partial<BookingType>[]
+  confirmedStays: StaysType[]
   numDays: number
   cabinCount: number
 }

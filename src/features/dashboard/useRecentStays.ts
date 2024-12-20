@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { ISOStringFormat, subDays } from 'date-fns'
 import { useSearchParams } from 'react-router-dom'
 import { getStaysAfterDate } from '../../services/apiBookings'
-import { BookingType } from '../../types'
+import { StaysType } from '../../types'
 
 export function useRecentStays() {
   const [searchParams] = useSearchParams()
@@ -24,7 +24,7 @@ export function useRecentStays() {
 
   return { stays, isLoadingStays, confirmedStays, numDays } as {
     isLoadingStays: boolean
-    confirmedStays: Partial<BookingType>[]
+    confirmedStays: StaysType[]
     numDays: number
   }
 }
