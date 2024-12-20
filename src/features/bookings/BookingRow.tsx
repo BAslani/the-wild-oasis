@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { format, isToday } from 'date-fns'
+import { format, ISOStringFormat, isToday } from 'date-fns'
 
 import Tag from '../../ui/Tag'
 import Table from '../../ui/Table'
@@ -88,11 +88,11 @@ function BookingRow({
         <span>
           {isToday(new Date(startDate))
             ? 'Today'
-            : formatDistanceFromNow(startDate)}{' '}
+            : formatDistanceFromNow(startDate.toString() as ISOStringFormat)}
           &rarr; {numNights} night stay
         </span>
         <span>
-          {format(new Date(startDate), 'MMM dd yyyy')} &mdash;{' '}
+          {format(new Date(startDate), 'MMM dd yyyy')} &mdash;
           {format(new Date(endDate), 'MMM dd yyyy')}
         </span>
       </Stacked>

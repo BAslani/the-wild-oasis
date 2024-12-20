@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { format, isToday } from 'date-fns'
+import { format, ISOStringFormat, isToday } from 'date-fns'
 import {
   HiOutlineChatBubbleBottomCenterText,
   HiOutlineCheckCircle,
@@ -139,7 +139,7 @@ function BookingDataBox({ booking }: Props) {
           {format(new Date(startDate), 'EEE, MMM dd yyyy')} (
           {isToday(new Date(startDate))
             ? 'Today'
-            : formatDistanceFromNow(startDate)}
+            : formatDistanceFromNow(startDate.toString() as ISOStringFormat)}
           ) &mdash; {format(new Date(endDate), 'EEE, MMM dd yyyy')}
         </p>
       </Header>
