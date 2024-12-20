@@ -123,8 +123,8 @@ function Toggle({ id }: { id: string }) {
   const { openId, close, open, setPosition } = useContext(MenusContext)
 
   function handleClick(e: MouseEvent<HTMLButtonElement>) {
-    // Specify the type here
-    const rect = e.currentTarget.getBoundingClientRect() // Use currentTarget instead of closest
+    e.stopPropagation()
+    const rect = e.currentTarget.getBoundingClientRect()
     setPosition({
       x: window.innerWidth - rect.width - rect.x,
       y: rect.y + rect.height + 8,
@@ -145,7 +145,7 @@ function Toggle({ id }: { id: string }) {
 }
 function List({ id, children }: { id: string; children: ReactNode }) {
   const { openId, position, close } = useContext(MenusContext)
-  const ref = useOutsideClick(close)
+  const ref = useOutsideClick(close, false)
   if (openId !== id) return null
 
   return createPortal(
