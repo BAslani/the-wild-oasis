@@ -10,6 +10,7 @@ function BookingTable() {
   const { bookings, isLoading, count } = useBookings()
 
   if (isLoading) return <Spinner />
+
   if (bookings.length === 0) return <Empty resource={'bookings'} />
 
   return (
